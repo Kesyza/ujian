@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use Alert;
 use App\Models\Mapel;
 use Illuminate\Http\Request;
 
@@ -43,6 +44,7 @@ class MapelController extends Controller
         $mapel = New Mapel;
         $mapel->nama_mapel = $request->nama_mapel;
         $mapel->save();
+        Alert::success('Bagus...', 'Data Mata Pelajaran ' .$mapel->nama_mapel .' berhasil ditambah');
         return redirect()->route('mapel.index');
     }
 
@@ -85,6 +87,7 @@ class MapelController extends Controller
         $mapel = Mapel::findOrFail($id);
         $mapel->nama_mapel = $request->nama_mapel;
         $mapel->save();
+        Alert::success('Mantap...', 'Data Mata Pelajaran ' .$mapel->nama_mapel .' berhasil diedit');
         return redirect()->route('mapel.index');
     }
 
@@ -96,8 +99,14 @@ class MapelController extends Controller
      */
     public function destroy($id)
     {
-        $mapel = Mapel::findOrFail($id);
-        $mapel->delete();
+        // $mapel = Mapel::findOrFail($id);
+        // $mapel->delete();
+        // return redirect()->route('mapel.index');
+
+        if (!Mapel::destroy($id)) {
+            return redirect()->back();
+        }
+        Alert::success('Sip...', 'Data Mata Pelajaran berhasil dihapus');
         return redirect()->route('mapel.index');
     }
 }

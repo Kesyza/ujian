@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use Alert;
 use App\Models\PaketSoal;
 use Illuminate\Http\Request;
 
@@ -37,12 +38,13 @@ class PaketSoalController extends Controller
     public function store(Request $request)
     {
         $validated = $request->validate([
-            'paketSoal' => 'required',
+            'paket_soal' => 'required',
         ]);
 
         $paketSoal = New PaketSoal;
-        $paketSoal->paketSoal = $request->paketSoal;
+        $paketSoal->paket_soal = $request->paket_soal;
         $paketSoal->save();
+        Alert::success('Bagus...', 'Data Paket Soal ' .$paketSoal->paket_soal .' berhasil ditambah');
         return redirect()->route('paketSoal.index');
     }
 
@@ -79,12 +81,13 @@ class PaketSoalController extends Controller
     public function update(Request $request, $id)
     {
         $validated = $request->validate([
-            'paketSoal' => 'required',
+            'paket_soal' => 'required',
         ]);
 
         $paketSoal = PaketSoal::findOrFail($id);
-        $paketSoal->paketSoal = $request->paketSoal;
+        $paketSoal->paket_soal = $request->paket_soal;
         $paketSoal->save();
+        Alert::success('Mantap...', 'Data Paket Soal ' .$paketSoal->paket_soal .' berhasil diedit');
         return redirect()->route('paketSoal.index');
     }
 
@@ -96,8 +99,14 @@ class PaketSoalController extends Controller
      */
     public function destroy($id)
     {
-        $paketSoal = PaketSoal::findOrFail($id);
-        $paketSoal->delete();
+        // $paketSoal = PaketSoal::findOrFail($id);
+        // $paketSoal->delete();
+        // return redirect()->route('paketSoal.index');
+
+        if (!PaketSoal::destroy($id)) {
+            return redirect()->back();
+        }
+        Alert::success('Sip...', 'Data Paket Soal berhasil dihapus');
         return redirect()->route('paketSoal.index');
     }
 }
